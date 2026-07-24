@@ -1,0 +1,20 @@
+info:
+  name: Refresh Token
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/refresh"
+  headers:
+    - name: Cookie
+      value: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbXJ4ODh2ejUwMDAwZjNjb3d5a3IyYWxuIiwidG9rZW5JZCI6ImU2M2RmN2VlLTZmNDYtNGVhNi04MWM5LTk5NmVjYTI5YzViOCIsInJlbWVtYmVyTWUiOmZhbHNlLCJpYXQiOjE3ODQ4MTg3NjcsImV4cCI6MTc4NTQyMzU2N30.C8nKScmcZcj9gYO7KaJT__cTLOe80OlMpvUS_ExT7gE; Max-Age=604800; Path=/api/v1/auth/refresh; Expires=Thu, 30 Jul 2026 14:59:28 GMT; HttpOnly; SameSite=Strict
+  auth:
+    type: bearer
+    token: ""
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

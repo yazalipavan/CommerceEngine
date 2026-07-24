@@ -1,3 +1,4 @@
+console.log("createApp() called");
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -8,7 +9,9 @@ import { pinoHttp } from "pino-http";
 import { logger } from "@/shared/logger/logger.js";
 import { errorHandler } from "@/shared/middleware/error-handler.js";
 import { notFoundHandler } from "@/shared/middleware/not-found.js";
+import { API_PREFIX } from "@/shared/constants/api.js";
 import healthModule from "./modules/health/index.js";
+import { authRouter } from "@/modules/auth/index.js";
 
 export function createApp() {
   const app = express();
@@ -38,6 +41,9 @@ export function createApp() {
 
   // Health Check
   app.use(healthModule);
+
+  // Auth Routes
+  app.use(`${API_PREFIX}/auth`, authRouter);
 
   // 404 Handler
   app.use(notFoundHandler);

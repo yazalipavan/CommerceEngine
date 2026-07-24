@@ -7,3 +7,105 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+enum UserStatus {
+  PENDING_VERIFICATION
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+
+model User {
+  id                String   @id @default(cuid())
+
+  firstName         String
+  lastName          String
+
+  email             String   @unique
+  passwordHash      String
+
+  phone             String?
+
+  profileImageUrl   String?
+
+  isEmailVerified   Boolean  @default(false)
+
+  status            UserStatus @default(PENDING_VERIFICATION)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+ refreshToken        RefreshToken?
+  emailVerifications  EmailVerification[]
+  passwordResets      PasswordReset[]
+
+  roles Role[]
+}
+
+model Role {
+
+  id          String @id @default(cuid())
+
+  code        String @unique
+
+  displayName String
+
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users User[]
+}
+
+model RefreshToken {
+
+  id          String   @id @default(cuid())
+
+  tokenHash   String
+
+  expiresAt   DateTime
+
+  createdAt   DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  userId       String   @unique
+
+  user User @relation(fields:[userId], references:[id], onDelete: Cascade)
+}
+
+model EmailVerification {
+
+  id String @id @default(cuid())
+
+  tokenHash String
+
+  expiresAt DateTime
+
+  verifiedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  userId String
+
+  user User @relation(fields:[userId], references:[id], onDelete: Cascade)
+}
+
+model PasswordReset {
+
+  id String @id @default(cuid())
+
+  tokenHash String
+
+  expiresAt DateTime
+
+  usedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  userId String
+
+  user User @relation(fields:[userId], references:[id], onDelete: Cascade)
+}
